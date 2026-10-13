@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sang's SSC CGL Practice Series ❤️</title>
+<style>
+:root{--ink:#242238;--muted:#6e6b80;--paper:#fffdfb;--line:#e9e3ee;--accent:#7156a5;--soft:#f2edf9;--green:#24734a;--red:#a33a48}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#f8f4fc,#fff8f3);font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink);min-height:100vh}
+main{max-width:850px;margin:auto;padding:22px 15px 48px}.hero{background:#fff;border:1px solid var(--line);border-radius:24px;padding:24px 22px;text-align:center;box-shadow:0 8px 28px #34214b0d}
+.kicker{font-size:.78rem;letter-spacing:.13em;text-transform:uppercase;color:var(--accent);font-weight:800}.hero h1{margin:8px 0;font-size:clamp(1.7rem,5vw,2.5rem)}.hero p{color:var(--muted);margin:8px auto;max-width:600px;line-height:1.55}
+.pill{display:inline-block;background:var(--soft);padding:7px 12px;border-radius:30px;font-size:.85rem;color:var(--accent);font-weight:700;margin:4px}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}.toolbar button,.btn{border:0;border-radius:12px;padding:11px 14px;background:var(--accent);color:white;font-weight:750;font-size:.95rem;cursor:pointer}.toolbar button.secondary,.btn.secondary{background:#fff;color:var(--accent);border:1px solid #d8cce8}.toolbar button.active{background:#34234d;color:#fff}
+.panel{background:#fff;border:1px solid var(--line);border-radius:20px;padding:20px;margin-top:14px;box-shadow:0 5px 20px #34214b08}.meta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;color:var(--muted);font-size:.9rem}.progress{height:7px;background:#eee8f4;border-radius:10px;overflow:hidden;margin:14px 0 20px}.progress div{height:100%;background:var(--accent);width:0;transition:width .2s}
+.qnum{color:var(--accent);font-size:.85rem;font-weight:800}.question{font-size:1.17rem;font-weight:750;line-height:1.5;margin:9px 0 18px}.options{display:grid;gap:10px}.option{width:100%;text-align:left;padding:13px 14px;border:1px solid var(--line);border-radius:13px;background:#fff;color:var(--ink);font-size:1rem;cursor:pointer}.option:hover{border-color:#b7a3d1;background:#fcfaff}.option.selected{border:2px solid var(--accent);background:var(--soft);padding:12px 13px}.option.correct{border-color:var(--green);background:#eff9f2}.option.wrong{border-color:var(--red);background:#fff0f1}
+.feedback{margin-top:14px;padding:12px;border-radius:12px;line-height:1.5;display:none}.feedback.show{display:block}.feedback.good{background:#eff9f2;color:#205c3c}.feedback.bad{background:#fff0f1;color:#852d3a}.nav{display:flex;justify-content:space-between;gap:10px;margin-top:18px}.nav button:disabled{opacity:.4;cursor:not-allowed}
+.hide{display:none!important}.score{font-size:2rem;font-weight:850;color:var(--accent)}.answerrow{padding:11px 0;border-bottom:1px solid var(--line);line-height:1.5}.answerrow:last-child{border:0}.answerrow strong{color:var(--accent)}.small{font-size:.87rem;color:var(--muted);line-height:1.55}.subjecttag{font-size:.78rem;background:#f5f1f8;color:#6a538a;padding:5px 8px;border-radius:8px;font-weight:700}
+@media print{body{background:white}.hero,.toolbar,#quizPanel,#resultsPanel,#introPanel,.no-print{display:none!important}#answerPanel{display:block!important;border:0;box-shadow:none}.answerrow{break-inside:avoid}}
+</style>
+</head>
+<body>
+<main>
+<section class="hero">
+<div class="kicker">Made with love, for your exam prep</div>
+<h1>Sang's SSC CGL Practice Series ❤️</h1>
+<p>One question at a time. Try honestly before checking the answer key. You've prepared for this — take a breath, focus, and do your best.</p>
+<span class="pill">50 Static GK + 15 Latest Current Affairs MCQs</span><span class="pill">Static GK and Latest GK & Current Affairs</span><span class="pill">Answer key + explanations</span>
+</section>
+<div class="toolbar no-print" id="subjectButtons"></div>
+<section class="panel" id="introPanel">
+<h2>How to use this set</h2>
+<ul>
+<li>Attempt all 50 General Awareness questions.</li>
+<li>Tap <b>Check answer</b> to see the explanation, or keep answers hidden until you finish.</li>
+<li>Use <b>Finish & score</b> to see your result.</li>
+<li>The separate answer sheet stays hidden until you open it.</li>
+</ul>
+<p class="small">This is an practice set with more exam-style, multi-step questions built around SSC CGL Tier-I topics, not a claim that these are exact previous-year questions. Use official notices and trusted PYQs for final verification.</p>
+<button class="btn" onclick="startQuiz()">Start practice</button>
+</section>
+<section class="panel hide" id="quizPanel">
+<div class="meta"><span id="subjectLabel"></span><span id="progressLabel"></span></div>
+<div class="progress"><div id="progressBar"></div></div>
+<div class="qnum" id="qnum"></div><div class="question" id="questionText"></div>
+<div class="options" id="options"></div>
+<div class="feedback" id="feedback"></div>
+<div class="nav">
+<button class="btn secondary" id="backBtn" onclick="move(-1)">← Back</button>
+<button class="btn secondary" id="checkBtn" onclick="checkAnswer()">Check answer</button>
+<button class="btn" id="nextBtn" onclick="move(1)">Next →</button>
+</div>
+<div class="toolbar"><button class="secondary" onclick="finishQuiz()">Finish & score</button><button class="secondary" onclick="toggleAnswers()">View separate answer sheet</button></div>
+</section>
+<section class="panel hide" id="resultsPanel">
+<h2>Your result</h2><div class="score" id="scoreText"></div><p id="resultMessage"></p>
+<div class="toolbar"><button onclick="retryWrong()">Retry incorrect questions</button><button class="secondary" onclick="showAnswers()">Open answer sheet</button><button class="secondary" onclick="resetQuiz()">Start again</button></div>
+</section>
+<section class="panel hide" id="answerPanel">
+<h2>Separate Answer Sheet</h2>
+<p class="small">Try the questions first. Correct options and short explanations are listed here for checking and revision.</p>
+<div id="answerList"></div>
+<div class="toolbar no-print"><button onclick="window.print()">Print answer sheet</button><button class="secondary" onclick="hideAnswers()">Back to quiz</button></div>
+</section>
+<footer class="small" style="text-align:center;padding:22px 8px">You don't need to know everything at once. One question, one step at a time. ❤️</footer>
+</main>
+<script>
+const bank = [
+{subject:"General Awareness",q:"The idea of the Directive Principles of State Policy in the Indian Constitution was borrowed primarily from which country's constitution?",o:["United States","Ireland","Canada","Australia"],a:1,e:"The Directive Principles of State Policy were inspired by the Irish Constitution."},
+{subject:"General Awareness",q:"Which Constitutional Amendment lowered the voting age from 21 to 18 years?",o:["42nd Amendment","44th Amendment","61st Amendment","73rd Amendment"],a:2,e:"The 61st Constitutional Amendment Act, 1988 lowered the voting age to 18."},
+{subject:"General Awareness",q:"The anti-defection provisions are contained in which Schedule of the Constitution?",o:["Eighth","Ninth","Tenth","Eleventh"],a:2,e:"The Tenth Schedule, added by the 52nd Amendment in 1985, deals with disqualification on grounds of defection."},
+{subject:"General Awareness",q:"Which Article empowers the President to promulgate ordinances when Parliament is not in session?",o:["Article 72","Article 123","Article 143","Article 213"],a:1,e:"Article 123 gives the President ordinance-making power when both Houses of Parliament are not simultaneously in session."},
+{subject:"General Awareness",q:"Who decides whether a bill is a Money Bill in the Lok Sabha?",o:["President","Prime Minister","Speaker of Lok Sabha","Finance Minister"],a:2,e:"The Speaker of the Lok Sabha certifies whether a bill is a Money Bill under Article 110."},
+{subject:"General Awareness",q:"Which body recommends the distribution of certain tax revenues between the Union and the States?",o:["NITI Aayog","Finance Commission","Election Commission","GST Council exclusively"],a:1,e:"The Finance Commission, constituted under Article 280, recommends tax devolution and grants-in-aid principles."},
+{subject:"General Awareness",q:"The Comptroller and Auditor General of India can be removed in a manner similar to the removal of a:",o:["Governor","Supreme Court judge","Cabinet Minister","Chief Election Commissioner only"],a:1,e:"The CAG is removed in the same manner and on the same grounds as a Supreme Court judge."},
+{subject:"General Awareness",q:"Which writ is issued to produce a detained person before a court to examine the legality of detention?",o:["Mandamus","Certiorari","Habeas corpus","Quo warranto"],a:2,e:"Habeas corpus protects personal liberty by requiring the detained person to be brought before the court."},
+{subject:"General Awareness",q:"The provisions relating to Panchayats were added to the Constitution by which amendment?",o:["42nd","52nd","73rd","74th"],a:2,e:"The 73rd Amendment constitutionalised Panchayati Raj institutions; the 74th Amendment concerns municipalities."},
+{subject:"General Awareness",q:"Which schedule lists the recognised languages of the Indian Constitution?",o:["Sixth","Seventh","Eighth","Ninth"],a:2,e:"The Eighth Schedule lists the constitutionally recognised languages."},
+{subject:"General Awareness",q:"The Regulating Act of 1773 established which institution in India?",o:["Federal Court","Supreme Court at Calcutta","High Court at Bombay","Public Service Commission"],a:1,e:"The Regulating Act of 1773 led to the establishment of the Supreme Court at Fort William, Calcutta, in 1774."},
+{subject:"General Awareness",q:"Who introduced the Subsidiary Alliance system as a major British expansion policy?",o:["Lord Dalhousie","Lord Wellesley","Lord Curzon","Lord Ripon"],a:1,e:"Lord Wellesley used the Subsidiary Alliance system to extend British control over Indian states."},
+{subject:"General Awareness",q:"The Doctrine of Lapse is most closely associated with:",o:["Lord Cornwallis","Lord Hastings","Lord Dalhousie","Lord Canning"],a:2,e:"Lord Dalhousie applied the Doctrine of Lapse to annex princely states lacking an accepted natural heir under the policy."},
+{subject:"General Awareness",q:"The Permanent Settlement of Bengal was introduced in 1793. Who was the Governor-General at the time?",o:["Warren Hastings","Lord Cornwallis","Lord Wellesley","Lord Minto"],a:1,e:"Lord Cornwallis introduced the Permanent Settlement in Bengal in 1793."},
+{subject:"General Awareness",q:"The Ilbert Bill controversy took place during the viceroyalty of:",o:["Lord Lytton","Lord Ripon","Lord Curzon","Lord Dufferin"],a:1,e:"The controversy over allowing Indian judges to try European British subjects arose during Lord Ripon's viceroyalty."},
+{subject:"General Awareness",q:"The Indian National Congress held its first session in 1885 at:",o:["Calcutta","Bombay","Madras","Allahabad"],a:1,e:"The first INC session was held in Bombay in December 1885, with W. C. Bonnerjee as president."},
+{subject:"General Awareness",q:"The Lucknow Pact of 1916 was an agreement between:",o:["Congress and the Muslim League","Congress and the British government","Muslim League and the Hindu Mahasabha","Revolutionary groups and the Crown"],a:0,e:"The Lucknow Pact brought the Indian National Congress and the All-India Muslim League to an agreement on constitutional reforms."},
+{subject:"General Awareness",q:"The Poona Pact of 1932 was signed between Mahatma Gandhi and:",o:["Muhammad Ali Jinnah","B. R. Ambedkar","Jawaharlal Nehru","Tej Bahadur Sapru"],a:1,e:"The Poona Pact was reached between Gandhi and Dr B. R. Ambedkar concerning representation for the Depressed Classes."},
+{subject:"General Awareness",q:"Who presided over the Lahore session of the Indian National Congress in 1929, associated with the demand for Purna Swaraj?",o:["Motilal Nehru","Subhas Chandra Bose","Jawaharlal Nehru","Vallabhbhai Patel"],a:2,e:"Jawaharlal Nehru presided over the Lahore session of 1929, where Purna Swaraj was declared the goal."},
+{subject:"General Awareness",q:"The Vernacular Press Act was passed in 1878 during the tenure of:",o:["Lord Ripon","Lord Lytton","Lord Curzon","Lord Mayo"],a:1,e:"Lord Lytton's government passed the Vernacular Press Act to restrict publications in Indian languages."},
+{subject:"General Awareness",q:"Which Harappan site is especially associated with evidence of a dockyard?",o:["Kalibangan","Dholavira","Lothal","Rakhigarhi"],a:2,e:"Lothal in present-day Gujarat is widely associated with a dockyard-like basin and maritime trade."},
+{subject:"General Awareness",q:"The Great Bath was discovered at which Indus Valley Civilisation site?",o:["Harappa","Mohenjo-daro","Banawali","Chanhudaro"],a:1,e:"The Great Bath is a prominent structure at Mohenjo-daro."},
+{subject:"General Awareness",q:"Which Ashokan inscription provides important evidence of his remorse after the Kalinga War?",o:["Major Rock Edict XIII","Pillar Edict VII","Minor Rock Edict I","Bhabru Edict"],a:0,e:"Major Rock Edict XIII describes Ashoka's remorse and changed attitude following the Kalinga War."},
+{subject:"General Awareness",q:"The Allahabad Pillar inscription praising Samudragupta was composed by:",o:["Banabhatta","Kalhana","Harisena","Vishakhadatta"],a:2,e:"Harisena, a court poet and official, composed the Prayaga Prashasti in praise of Samudragupta."},
+{subject:"General Awareness",q:"Which Chola ruler is associated with the construction of the Brihadisvara Temple at Thanjavur?",o:["Rajendra I","Rajaraja I","Kulottunga I","Parantaka I"],a:1,e:"Rajaraja Chola I commissioned the Brihadisvara Temple, completed around 1010 CE."},
+{subject:"General Awareness",q:"The Mansabdari system was a key administrative feature under which Mughal ruler?",o:["Babur","Humayun","Akbar","Aurangzeb"],a:2,e:"Akbar developed and systematised the mansabdari ranking system for civil and military administration."},
+{subject:"General Awareness",q:"The Vijayanagara Empire was founded in 1336 by:",o:["Krishnadevaraya and Achyuta Raya","Harihara and Bukka","Deva Raya I and Deva Raya II","Salुवa Narasimha and Tuluva Narasa"],a:1,e:"The brothers Harihara and Bukka are traditionally credited with founding the Vijayanagara kingdom in 1336."},
+{subject:"General Awareness",q:"Which river forms a major estuary rather than a large delta on India's western coast?",o:["Godavari","Krishna","Narmada","Mahanadi"],a:2,e:"The Narmada flows west through a rift valley and forms an estuary in the Arabian Sea."},
+{subject:"General Awareness",q:"Black cotton soil in India is largely derived from the weathering of:",o:["Granite","Basaltic lava","Sandstone","Limestone"],a:1,e:"Regur or black cotton soil is strongly associated with the Deccan Trap basalt."},
+{subject:"General Awareness",q:"Which pass connects the Kashmir Valley with Ladakh and lies on the Srinagar–Leh route?",o:["Nathu La","Shipki La","Zoji La","Bomdi La"],a:2,e:"Zoji La lies on the route connecting Srinagar and Leh."},
+{subject:"General Awareness",q:"The Coriolis force is caused by:",o:["Earth's revolution around the Sun","Earth's rotation","Differences in ocean salinity","The Moon's gravitational pull alone"],a:1,e:"Earth's rotation causes the apparent deflection of moving air and water, known as the Coriolis effect."},
+{subject:"General Awareness",q:"Which Indian state has the longest coastline among Indian states?",o:["Tamil Nadu","Andhra Pradesh","Gujarat","Maharashtra"],a:2,e:"Gujarat has the longest coastline among Indian states."},
+{subject:"General Awareness",q:"The Ten Degree Channel separates:",o:["India and Sri Lanka","Andaman Islands and Nicobar Islands","Lakshadweep and Maldives","Minicoy and the mainland"],a:1,e:"The Ten Degree Channel separates the Andaman group from the Nicobar group."},
+{subject:"General Awareness",q:"Which of the following is a warm ocean current?",o:["Labrador Current","Peru Current","Gulf Stream","Oyashio Current"],a:2,e:"The Gulf Stream is a warm current in the North Atlantic; the others listed are cold currents."},
+{subject:"General Awareness",q:"The ozone layer that absorbs much of the Sun's harmful ultraviolet radiation is concentrated in the:",o:["Troposphere","Stratosphere","Mesosphere","Thermosphere"],a:1,e:"Most atmospheric ozone is concentrated in the stratosphere."},
+{subject:"General Awareness",q:"Which cell organelle is primarily responsible for ATP production through aerobic respiration?",o:["Lysosome","Golgi apparatus","Mitochondrion","Ribosome"],a:2,e:"Mitochondria generate most ATP during aerobic cellular respiration."},
+{subject:"General Awareness",q:"Which blood group is commonly called the universal red-cell donor, considering the ABO and Rh systems?",o:["AB positive","O positive","O negative","AB negative"],a:2,e:"O-negative red cells lack A, B and Rh(D) antigens and are used as the universal red-cell donor type in emergencies, subject to clinical protocols."},
+{subject:"General Awareness",q:"Which vitamin deficiency is classically associated with pernicious anaemia?",o:["Vitamin B1","Vitamin B12","Vitamin C","Vitamin K"],a:1,e:"Pernicious anaemia results from impaired vitamin B12 absorption, commonly due to intrinsic-factor deficiency."},
+{subject:"General Awareness",q:"A solution with pH 3 is how many times as acidic in hydrogen-ion concentration as a solution with pH 5?",o:["2 times","10 times","100 times","1,000 times"],a:2,e:"Each pH unit represents a tenfold change in hydrogen-ion concentration; a two-unit difference means 100 times."},
+{subject:"General Awareness",q:"Which law states that pressure is inversely proportional to volume for a fixed amount of gas at constant temperature?",o:["Charles's law","Boyle's law","Avogadro's law","Faraday's law"],a:1,e:"Boyle's law states P × V = constant at constant temperature for a fixed amount of gas."},
+{subject:"General Awareness",q:"Which metal is liquid at approximately room temperature?",o:["Sodium","Mercury","Aluminium","Gallium only"],a:1,e:"Mercury is liquid at ordinary room temperature. Gallium melts slightly above typical room temperature."},
+{subject:"General Awareness",q:"Which instrument measures atmospheric pressure?",o:["Hygrometer","Anemometer","Barometer","Seismograph"],a:2,e:"A barometer measures atmospheric pressure; anemometers measure wind speed and hygrometers measure humidity."},
+{subject:"General Awareness",q:"The SI unit of electrical resistance is:",o:["Volt","Ampere","Ohm","Watt"],a:2,e:"Electrical resistance is measured in ohms (Ω)."},
+{subject:"General Awareness",q:"Which Indian classical dance form is associated with the state of Manipur?",o:["Sattriya","Manipuri","Mohiniyattam","Kathak"],a:1,e:"Manipuri is a classical dance tradition originating in Manipur."},
+{subject:"General Awareness",q:"The Sattriya classical dance tradition originated in:",o:["Assam","Odisha","Kerala","Gujarat"],a:0,e:"Sattriya developed in Assam in the Vaishnavite monasteries known as sattras."},
+{subject:"General Awareness",q:"The 'Blue Revolution' in India is associated primarily with:",o:["Milk production","Oilseed production","Fish production","Food-grain production"],a:2,e:"The Blue Revolution refers to growth and development in fisheries and aquaculture."},
+{subject:"General Awareness",q:"Which institution is India's central bank and regulator of monetary policy?",o:["SEBI","RBI","NABARD","IRDAI"],a:1,e:"The Reserve Bank of India is the central bank and conducts monetary policy."},
+{subject:"General Awareness",q:"In national income accounting, GDP at market prices measures the value of:",o:["Only final goods produced by Indian-owned firms abroad","Final goods and services produced within a country's domestic territory during a period","All intermediate goods produced in a year","Only government services"],a:1,e:"GDP measures the market value of final goods and services produced within domestic territory during a given period."},
+{subject:"General Awareness",q:"Which organisation releases the Human Development Report?",o:["World Bank","UNDP","UNESCO","World Economic Forum"],a:1,e:"The United Nations Development Programme publishes the Human Development Report."},
+{subject:"General Awareness",q:"The headquarters of the International Court of Justice is in:",o:["Geneva","New York","The Hague","Vienna"],a:2,e:"The International Court of Justice is based at the Peace Palace in The Hague, Netherlands."},
+{subject:"General Awareness",q:"Which Indian space mission was the first to make a successful soft landing near the Moon's south polar region?",o:["Chandrayaan-1","Chandrayaan-2","Chandrayaan-3","Mangalyaan"],a:2,e:"Chandrayaan-3 achieved a successful lunar soft landing in August 2023."},
+{subject:"Latest GK & Current Affairs",q:"Who was announced as the 2026 Nobel Prize in Physics laureate for work linked to the IceCube Neutrino Observatory?",o:["Francis Halzen","Geoffrey Hinton","Alain Aspect","Anton Zeilinger"],a:0,e:"Current-affairs update: Francis Halzen was reported as the 2026 Physics Nobel laureate for contributions linked to the IceCube Neutrino Observatory."},
+{subject:"Latest GK & Current Affairs",q:"The 2026 Nobel Prize in Chemistry was reported as going to Henri B. Kagan and Kenso Soai for work related to:",o:["Non-linear effects and autocatalysis in asymmetric organic synthesis","CRISPR gene editing","Lithium-ion batteries","Quantum dots in display technology"],a:0,e:"The reported 2026 Chemistry Nobel recognised work concerning non-linear effects and autocatalysis in asymmetric organic synthesis."},
+{subject:"Latest GK & Current Affairs",q:"Who was reported as the winner of the 2026 Nobel Prize in Literature?",o:["Anne Carson","Margaret Atwood","Haruki Murakami","Salman Rushdie"],a:0,e:"The Swedish Academy announcement reported Canadian poet and essayist Anne Carson as the 2026 Literature laureate."},
+{subject:"Latest GK & Current Affairs",q:"Which Indian mathematician received the 2026 Ramanujan Prize, according to current-affairs reports?",o:["Mahesh Kakde","Manjul Bhargava","C. R. Rao","Srinivasa Varadhan"],a:0,e:"Professor Mahesh Kakde of IISc Bengaluru was reported as the 2026 Ramanujan Prize recipient for contributions to algebraic number theory."},
+{subject:"Latest GK & Current Affairs",q:"Who was reported to be set to become the 29th Chief of the Air Staff of India on 31 October 2026?",o:["Air Marshal Ashutosh Dixit","Air Chief Marshal A. P. Singh","Air Marshal Sandeep Singh","Air Marshal Vivek Ram Chaudhari"],a:0,e:"Current-affairs reports identified Air Marshal Ashutosh Dixit as set to become the 29th Chief of the Air Staff on 31 October 2026."},
+{subject:"Latest GK & Current Affairs",q:"SAREX-2026, the National Maritime Search and Rescue Exercise, is organised by which organisation?",o:["Indian Coast Guard","Indian Navy","National Disaster Management Authority","Border Security Force"],a:0,e:"SAREX is the Indian Coast Guard's maritime search-and-rescue exercise. The 2026 event was reported as its 12th edition."},
+{subject:"Latest GK & Current Affairs",q:"The 2026 Asian Games were hosted in which Japanese region/city area?",o:["Aichi-Nagoya","Tokyo-Yokohama","Osaka-Kobe","Sapporo-Otaru"],a:0,e:"The 20th Asian Games were scheduled for 19 September to 4 October 2026 in Aichi-Nagoya, Japan."},
+{subject:"Latest GK & Current Affairs",q:"According to reports following the 2026 Asian Games, how many medals did India win, finishing fourth in the medal tally?",o:["85","106","70","112"],a:0,e:"Reports stated that India finished fourth with 85 medals at the 2026 Asian Games. Verify final results with an official sports source during revision."},
+{subject:"Latest GK & Current Affairs",q:"Which ministry issued the operational guidelines for the Khelo India Scheme for 2026–27 to 2030–31?",o:["Ministry of Youth Affairs and Sports","Ministry of Education","Ministry of Culture","Ministry of Home Affairs"],a:0,e:"The Ministry of Youth Affairs and Sports listed the operational guidelines for the Khelo India Scheme for 2026–27 to 2030–31."},
+{subject:"Latest GK & Current Affairs",q:"The BRICS Traditional and Indigenous Demonstration Games 2026 were announced to take place in which Indian city?",o:["Ahmedabad","Jaipur","Bhopal","Guwahati"],a:0,e:"The Ministry of Youth Affairs and Sports announced the BRICS Traditional and Indigenous Demonstration Games 2026 in Ahmedabad."},
+{subject:"Latest GK & Current Affairs",q:"At the 72nd National Film Awards, who was reported to receive the Dadasaheb Phalke Award?",o:["Anant Nag","Mammootty","Mohanlal","Amitabh Bachchan"],a:0,e:"A President of India press release dated 22 September 2026 stated that the 72nd National Film Awards ceremony conferred the Dadasaheb Phalke Award on Anant Nag."},
+{subject:"Latest GK & Current Affairs",q:"India and the Netherlands were reported to be collaborating on how many Centres of Excellence in agriculture and horticulture?",o:["25","10","50","15"],a:0,e:"A current-affairs report described cooperation between India and the Netherlands to establish 25 Centres of Excellence in agriculture and horticulture."},
+{subject:"Latest GK & Current Affairs",q:"The 2026 Nobel Prize in Physics was linked to research on which subatomic particle?",o:["Neutrinos","Higgs bosons only","Protons in the atomic nucleus","Gravitons"],a:0,e:"The reported award recognised work linked to the IceCube Neutrino Observatory and high-energy astrophysical neutrinos."},
+{subject:"Latest GK & Current Affairs",q:"Which organisation publishes the Living Planet Report, a major global biodiversity assessment highlighted in October 2026 current-affairs coverage?",o:["WWF (World Wide Fund for Nature)","World Trade Organization","International Monetary Fund","International Labour Organization"],a:0,e:"The Living Planet Report is published by WWF, the World Wide Fund for Nature."},
+{subject:"Latest GK & Current Affairs",q:"The Global Innovation Index is published by which organisation?",o:["World Intellectual Property Organization (WIPO)","World Health Organization (WHO)","UNICEF","International Court of Justice"],a:0,e:"The Global Innovation Index is published by WIPO, the World Intellectual Property Organization."}
+];
+const subjects=["All","General Awareness","Latest GK & Current Affairs"];
+let currentSubject="All", current=0, answers={}, checked={}, finished=false, visibleQuestions=bank.map((_,i)=>i);
+const $=id=>document.getElementById(id);
+function buildSubjects(){ $("subjectButtons").innerHTML=subjects.map(s=>`<button class="${s===currentSubject?'active':''}" onclick="chooseSubject('${s}')">${s}</button>`).join("");}
+function chooseSubject(s){currentSubject=s;visibleQuestions=bank.map((q,i)=>q.subject===s||s==="All"?i:-1).filter(i=>i>=0);current=0;finished=false;buildSubjects();$("introPanel").classList.add("hide");$("resultsPanel").classList.add("hide");$("answerPanel").classList.add("hide");$("quizPanel").classList.remove("hide");render();}
+function startQuiz(){chooseSubject(currentSubject);}
+function render(){let idx=visibleQuestions[current],q=bank[idx];if(!q)return;$("subjectLabel").textContent=q.subject;$("progressLabel").textContent=`Question ${current+1} of ${visibleQuestions.length}`;$("progressBar").style.width=((current+1)/visibleQuestions.length*100)+"%";$("qnum").textContent=`QUESTION ${idx+1}`;$("questionText").textContent=q.q;$("options").innerHTML=q.o.map((o,j)=>`<button class="option ${answers[idx]===j?'selected':''}" onclick="selectOption(${j})">${String.fromCharCode(65+j)}. ${o}</button>`).join("");$("backBtn").disabled=current===0;$("nextBtn").textContent=current===visibleQuestions.length-1?"Finish →":"Next →";let f=$("feedback");if(checked[idx]){f.className="feedback show "+(answers[idx]===q.a?"good":"bad");f.innerHTML=`<b>${answers[idx]===q.a?"Correct!":"Not quite."}</b> ${q.e}`;}else{f.className="feedback";f.textContent="";}$("checkBtn").disabled=answers[idx]===undefined;}
+function selectOption(j){let idx=visibleQuestions[current];answers[idx]=j;checked[idx]=false;render();}
+function checkAnswer(){let idx=visibleQuestions[current];if(answers[idx]===undefined)return;checked[idx]=true;render();}
+function move(d){if(current+d<0)return;if(current+d>=visibleQuestions.length){finishQuiz();return;}current+=d;render();}
+function finishQuiz(){let ids=visibleQuestions;let attempted=ids.filter(i=>answers[i]!==undefined).length;let correct=ids.filter(i=>answers[i]===bank[i].a).length;$("quizPanel").classList.add("hide");$("answerPanel").classList.add("hide");$("resultsPanel").classList.remove("hide");$("scoreText").textContent=`${correct} / ${ids.length}`;$("resultMessage").textContent=`Attempted ${attempted} of ${ids.length}. Correct: ${correct}. Incorrect: ${attempted-correct}. Unanswered: ${ids.length-attempted}. Keep going — review the explanations and retry the tricky ones.`;finished=true;}
+function toggleAnswers(){if($("answerPanel").classList.contains("hide"))showAnswers();else hideAnswers();}
+function showAnswers(){let ids=visibleQuestions;$("quizPanel").classList.add("hide");$("resultsPanel").classList.add("hide");$("introPanel").classList.add("hide");$("answerPanel").classList.remove("hide");$("answerList").innerHTML=ids.map(i=>{let q=bank[i];return `<div class="answerrow"><strong>Q${i+1} · ${q.subject}</strong><br>${q.q}<br><b>Answer: ${String.fromCharCode(65+q.a)}. ${q.o[q.a]}</b><br><span class="small">${q.e}</span></div>`}).join("");}
+function hideAnswers(){$("answerPanel").classList.add("hide");$("quizPanel").classList.remove("hide");render();}
+function retryWrong(){visibleQuestions=visibleQuestions.filter(i=>answers[i]!==bank[i].a);if(!visibleQuestions.length){$("resultMessage").textContent="Amazing — you got every question in this set correct!";return;}current=0;$("resultsPanel").classList.add("hide");$("quizPanel").classList.remove("hide");render();}
+function resetQuiz(){answers={};checked={};visibleQuestions=bank.map((q,i)=>q.subject===currentSubject||currentSubject==="All"?i:-1).filter(i=>i>=0);current=0;$("resultsPanel").classList.add("hide");$("answerPanel").classList.add("hide");$("introPanel").classList.add("hide");$("quizPanel").classList.remove("hide");render();}
+buildSubjects();
+</script>
+</body>
+</html>
